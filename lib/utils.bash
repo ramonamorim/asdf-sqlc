@@ -72,6 +72,10 @@ download_release() {
 	echo "Saving file to: $filename"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 	echo "* Download Completed Successfully!!1 $TOOL_NAME release $version..."
+
+	echo "* Extracting $filename..."
+	tar -xzf "$filename" -C "$(dirname "$filename")" || fail "Could not extract $filename"
+	echo "* Extraction completed successfully!"
 }
 
 install_version() {
