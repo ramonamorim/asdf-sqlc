@@ -27,12 +27,10 @@ sort_versions() {
 list_github_tags() {
 	git ls-remote --tags --refs "$GH_REPO" |
 		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+		sed 's/^v//' 
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if sqlc has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -41,8 +39,34 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for sqlc
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	case "$(uname -s)" in
+        Darwin)
+            os="darwin"
+            ;;
+        Linux)
+            os="linux"
+            ;;
+        CYGWIN*|MINGW32*|MSYS*|MINGW*)
+            os="windows"
+            ;;
+        *)
+            fail "Unsupported operating system"
+            ;;
+    esac
+
+    case "$(uname -m)" in
+        x86_64)
+            arch="amd64"
+            ;;
+        arm64)
+            arch="arm64"
+            ;;
+        *)
+            fail "Unsupported architecture"
+            ;;
+    esac
+
+	url="$GH_REPO/archive/v${version}_${os}_${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
