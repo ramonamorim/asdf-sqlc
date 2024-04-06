@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for sqlc.
 GH_REPO="https://github.com/sqlc-dev/sqlc"
 TOOL_NAME="sqlc"
 TOOL_TEST="sqlc version"
@@ -14,7 +13,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if sqlc is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -68,14 +66,9 @@ download_release() {
 
 	url="$GH_REPO/releases/download/v${version}/sqlc_${version}_${os}_${arch}.tar.gz"
 
-	echo "* Downloading $TOOL_NAME release $version..."
-	echo "Saving file to: $filename"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
-	echo "* Download Completed Successfully!!1 $TOOL_NAME release $version..."
 
-	echo "* Extracting $filename..."
 	tar -xzf "$filename" -C "$(dirname "$filename")" || fail "Could not extract $filename"
-	echo "* Extraction completed successfully!"
 }
 
 install_version() {
@@ -95,12 +88,10 @@ install_version() {
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-		# TODO: Assert sqlc executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
-
-		echo "$TOOL_NAME $version installation was successful!"
+		
 	) || (
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
