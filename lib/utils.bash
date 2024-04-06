@@ -69,6 +69,7 @@ download_release() {
 	url="$GH_REPO/releases/download/v${version}/sqlc_${version}_${os}_${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
+	echo "Saving file to: $filename"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 	echo "* Download Completed Successfully!!1 $TOOL_NAME release $version..."
 }
