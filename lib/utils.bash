@@ -70,6 +70,7 @@ download_release() {
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	echo "* Download Completed Successfully!!1 $TOOL_NAME release $version..."
 }
 
 install_version() {
@@ -82,6 +83,10 @@ install_version() {
 	fi
 
 	(
+		if [ ! -d "$ASDF_DOWNLOAD_PATH" ]; then
+            fail "Download directory $ASDF_DOWNLOAD_PATH not found."
+        fi
+		
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
