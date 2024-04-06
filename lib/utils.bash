@@ -25,7 +25,7 @@ sort_versions() {
 list_github_tags() {
 	git ls-remote --tags --refs "$GH_REPO" |
 		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' 
+		sed 's/^v//'
 }
 
 list_all_versions() {
@@ -38,31 +38,31 @@ download_release() {
 	filename="$2"
 
 	case "$(uname -s)" in
-        Darwin)
-            os="darwin"
-            ;;
-        Linux)
-            os="linux"
-            ;;
-        CYGWIN*|MINGW32*|MSYS*|MINGW*)
-            os="windows"
-            ;;
-        *)
-            fail "Unsupported operating system"
-            ;;
-    esac
+	Darwin)
+		os="darwin"
+		;;
+	Linux)
+		os="linux"
+		;;
+	CYGWIN* | MINGW32* | MSYS* | MINGW*)
+		os="windows"
+		;;
+	*)
+		fail "Unsupported operating system"
+		;;
+	esac
 
-    case "$(uname -m)" in
-        x86_64)
-            arch="amd64"
-            ;;
-        arm64)
-            arch="arm64"
-            ;;
-        *)
-            fail "Unsupported architecture"
-            ;;
-    esac
+	case "$(uname -m)" in
+	x86_64)
+		arch="amd64"
+		;;
+	arm64)
+		arch="arm64"
+		;;
+	*)
+		fail "Unsupported architecture"
+		;;
+	esac
 
 	url="$GH_REPO/releases/download/v${version}/sqlc_${version}_${os}_${arch}.tar.gz"
 
@@ -82,16 +82,16 @@ install_version() {
 
 	(
 		if [ ! -d "$ASDF_DOWNLOAD_PATH" ]; then
-            fail "Download directory $ASDF_DOWNLOAD_PATH not found."
-        fi
-		
+			fail "Download directory $ASDF_DOWNLOAD_PATH not found."
+		fi
+
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
-		
+
 	) || (
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
