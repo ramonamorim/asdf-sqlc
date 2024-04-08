@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/ramonamorim/asdf-sqlc/compare/v1.0.0...v1.1.0) (2024-04-08)
+
+
+### Features
+
+* **docs:** Update readme.md ([#6](https://github.com/ramonamorim/asdf-sqlc/issues/6)) ([31b10df](https://github.com/ramonamorim/asdf-sqlc/commit/31b10dfde70cee552d22cbf8e7535c97d084c33c))
+
 ## 1.0.0 (2024-04-07)
 
 
